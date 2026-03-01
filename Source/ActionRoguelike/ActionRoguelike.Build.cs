@@ -10,7 +10,7 @@ public class ActionRoguelike : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(["Core", "CoreUObject", "Engine", "InputCore"]);
 
-		PrivateDependencyModuleNames.AddRange(["EnhancedInput"]);
+		PrivateDependencyModuleNames.AddRange(["EnhancedInput", "Niagara"]);
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

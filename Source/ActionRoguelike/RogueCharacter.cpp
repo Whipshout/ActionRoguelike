@@ -59,6 +59,15 @@ void ARogueCharacter::Look(const FInputActionInstance& InValue)
 
 void ARogueCharacter::PrimaryAttack()
 {
+	PlayAnimMontage(AttackMontage);
+
+	FTimerHandle AttackTimerHandle;
+	constexpr float AttackDelayTime = 0.2f;
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ARogueCharacter::AttackTimerElapsed, AttackDelayTime);
+}
+
+void ARogueCharacter::AttackTimerElapsed()
+{
 	const FVector SpawnLocation = GetMesh()->GetSocketLocation(MuzzleSocketName);
 	const FRotator SpawnRotation = GetControlRotation();
 

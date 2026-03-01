@@ -1,8 +1,10 @@
 #include "RogueCharacter.h"
 
 #include "EnhancedInputComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Projectiles/RogueProjectileMagic.h"
 
 ARogueCharacter::ARogueCharacter()
@@ -63,6 +65,12 @@ void ARogueCharacter::PrimaryAttack()
 
 	FTimerHandle AttackTimerHandle;
 	constexpr float AttackDelayTime = 0.2f;
+
+	UNiagaraFunctionLibrary::SpawnSystemAttached(CastingEffect, GetMesh(), MuzzleSocketName, FVector::ZeroVector,
+	                                             FRotator::ZeroRotator, EAttachLocation::Type::SnapToTarget, true);
+
+	UGameplayStatics::PlaySound2D(this, CastingSound);
+
 	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ARogueCharacter::AttackTimerElapsed, AttackDelayTime);
 }
 
@@ -75,7 +83,9 @@ void ARogueCharacter::AttackTimerElapsed()
 	SpawnParams.Instigator = this;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+	AActor* NewProjectile = GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+	MoveIgnoreActorAdd(NewProjectile);
 }
 
 void ARogueCharacter::Tick(const float DeltaTime)

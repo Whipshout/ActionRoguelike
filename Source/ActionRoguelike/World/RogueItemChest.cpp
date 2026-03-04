@@ -12,10 +12,8 @@ ARogueItemChest::ARogueItemChest()
 	LidMeshComponent->SetupAttachment(BaseMeshComponent);
 }
 
-void ARogueItemChest::BeginPlay()
+void ARogueItemChest::Interact()
 {
-	Super::BeginPlay();
-
 	SetActorTickEnabled(true);
 }
 
